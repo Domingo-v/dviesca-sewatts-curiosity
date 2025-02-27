@@ -71,28 +71,48 @@ open "vector_space.frg"
 // TEST WELLFORMED PROPERTY
 test suite for wellformed {
     // POSITIVE TEST CASES
+    example wellformedVectorSpace is { wellformed } for {
+        VectorSpace = `VS
+
+        Triple = `zero
+
+        Int = 0 + 1 + 2 + 3 + 4 + -1 + -2 + -3 + -4
+
+        `VS.Group = {`zero}
+        `VS.AddIdentity = `zero
+        `VS.MultiplicativeIdentity = 1
+        
+        `zero.x = 0
+        `zero.y = 0
+        `zero.z = 0
+    } 
+
     example validWellformedVectorSpace is { wellformed } for {
         VectorSpace = `VS
+
         Triple = `v1 + `v2 + `zero
-        Int = 0 + 1 + 2 + 3 + 4
+
+        Int = 0 + 1 + 2 + 3 + 4 + -1 + -2 + -3 + -4
+
         `VS.Group = `v1 + `v2 + `zero
         `VS.AddIdentity = `zero
+
         `zero.x = 0
         `zero.y = 0
         `zero.z = 0
         `v1.x = 1
         `v1.y = 2
-        `v1.z = 3
-        `v2.x = 3
+        `v1.z = 2
+        `v2.x = 2
         `v2.y = 2
         `v2.z = 1
-    } //assert { wellformed }
+    } 
 
     // NEGATIVE TEST CASES
     example invalidVectorLength is { not wellformed } for {
         VectorSpace = `VS
         Triple = `v1 + `zero
-        Int = 0 + 1 + 2 + 3 + 4
+        Int = 0 + 1 + 2 + 3 + 4 + -1 + -2 + -3 + -4
         `VS.Group = `v1 + `zero
         `VS.AddIdentity = `zero
         `zero.x = 0
@@ -101,12 +121,12 @@ test suite for wellformed {
         `v1.x = 1
         `v1.y = 2
         // Missing `v1.z`, which is invalid
-    } //assert { not wellformed }
+    } 
 
     example missingAddIdentity is { not wellformed } for {
         VectorSpace = `VS
         Triple = `v1
-        Int = 0 + 1 + 2 + 3 + 4
+        Int = 0 + 1 + 2 + 3 + 4 + -1 + -2 + -3 + -4
         `VS.Group = `v1 // Missing zero vector
         `VS.AddIdentity = `zero
         `zero.x = 0
@@ -115,7 +135,7 @@ test suite for wellformed {
         `v1.x = 1
         `v1.y = 2
         `v1.z = 3
-    } //assert { not wellformed }
+    } 
 }
 
 // TEST VECTOR SPACE AXIOMS
@@ -123,7 +143,7 @@ test suite for vector_space_axioms {
     example testAdditiveIdentity is { additiveIdentityAxiom } for {
         VectorSpace = `VS
         Triple = `v1 + `zero
-        Int = 0 + 1 + 2 + 3 + 4
+        Int = 0 + 1 + 2 + 3 + 4 + -1 + -2 + -3 + -4
         `VS.Group = `v1 + `zero
         `VS.AddIdentity = `zero
         `zero.x = 0
@@ -132,30 +152,30 @@ test suite for vector_space_axioms {
         `v1.x = 2
         `v1.y = 3
         `v1.z = 4
-    } //assert { additiveIdentityAxiom }
+    } 
 
     example testMultiplicativeIdentity is { multiplicativeIdentityAxiom } for {
         VectorSpace = `VS
-        Triple = `v1 + `zero + `one
-        Int = 0 + 1 + 2 + 3 + 4
-        `VS.Group = `v1 + `zero + `one
+        Triple = `v1 + `zero + `v2
+        Int = 0 + 1 + 2 + 3 + 4 + -1 + -2 + -3 + -4
+        `VS.Group = `v1 + `zero + `v2
         `VS.AddIdentity = `zero
-        `VS.MultiplicativeIdentity = `one
+        `VS.MultiplicativeIdentity = `v2
         `zero.x = 0
         `zero.y = 0
         `zero.z = 0
-        `one.x = 1
-        `one.y = 1
-        `one.z = 1
+        `v2.x = 1
+        `v2.y = 1
+        `v2.z = 1
         `v1.x = 2
         `v1.y = 3
         `v1.z = 4
-    } //assert { multiplicativeIdentityAxiom }
+    } 
 
-    example testAdditiveCommutativity is { additiveCommutativityAxiom } for {
+    example testAdditiveCommutativity is { additiveInverseAxiom and commutativity } for {
         VectorSpace = `VS
         Triple = `v1 + `v2 + `zero
-        Int = 0 + 1 + 2 + 3 + 4
+        Int = 0 + 1 + 2 + 3 + 4 + -1 + -2 + -3 + -4
         `VS.Group = `v1 + `v2 + `zero
         `VS.AddIdentity = `zero
         `zero.x = 0
@@ -167,21 +187,21 @@ test suite for vector_space_axioms {
         `v2.x = 1
         `v2.y = 3
         `v2.z = 2
-    } //assert { additiveCommutativityAxiom }
+    } 
 
-    example testMultiplicativeAssociativity is { multiplicativeAssociativityAxiom } for {
+    example testMultiplicativeAssociativity is { associativityMultiplication } for {
         VectorSpace = `VS
-        Triple = `v1 + `v2 + `v3 + `zero + `one
-        Int = 0 + 1 + 2 + 3 + 4
-        `VS.Group = `v1 + `v2 + `v3 + `zero + `one
+        Triple = `v1 + `v2 + `v3 + `zero + `vone
+        Int = 0 + 1 + 2 + 3 + 4 + -1 + -2 + -3 + -4
+        `VS.Group = `v1 + `v2 + `v3 + `zero + `vone
         `VS.AddIdentity = `zero
-        `VS.MultiplicativeIdentity = `one
+        `VS.MultiplicativeIdentity = `vone
         `zero.x = 0
         `zero.y = 0
         `zero.z = 0
-        `one.x = 1
-        `one.y = 1
-        `one.z = 1
+        `vone.x = 1
+        `vone.y = 1
+        `vone.z = 1
         `v1.x = 2
         `v1.y = 3
         `v1.z = 1
@@ -191,21 +211,20 @@ test suite for vector_space_axioms {
         `v3.x = 3
         `v3.y = 1
         `v3.z = 2
-    } //assert { multiplicativeAssociativityAxiom }
-
-    example testDistributivity is { distributivityAxiom } for {
+    } 
+    example testDistributivity is { distributivity } for {
         VectorSpace = `VS
-        Triple = `v1 + `v2 + `v3 + `zero + `one
-        Int = 0 + 1 + 2 + 3 + 4
-        `VS.Group = `v1 + `v2 + `v3 + `zero + `one
+        Triple = `v1 + `v2 + `v3 + `zero + `vone
+        Int = 0 + 1 + 2 + 3 + 4 + -1 + -2 + -3 + -4
+        `VS.Group = `v1 + `v2 + `v3 + `zero + `vone
         `VS.AddIdentity = `zero
-        `VS.MultiplicativeIdentity = `one
+        `VS.MultiplicativeIdentity = `vone
         `zero.x = 0
         `zero.y = 0
         `zero.z = 0
-        `one.x = 1
-        `one.y = 1
-        `one.z = 1
+        `vone.x = 1
+        `vone.y = 1
+        `vone.z = 1
         `v1.x = 2
         `v1.y = 3
         `v1.z = 1
@@ -215,6 +234,6 @@ test suite for vector_space_axioms {
         `v3.x = 3
         `v3.y = 1
         `v3.z = 2
-    } //assert { distributivityAxiom }
+    } 
 }
 
