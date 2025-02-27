@@ -23,6 +23,7 @@ pred wellformed {
     // Group must contain at least one element
     // some VectorSpace.Group
 
+    // all t triples are in some v vectorspace
     all t: Triple |
         some s: VectorSpace |
             t in s.Group
